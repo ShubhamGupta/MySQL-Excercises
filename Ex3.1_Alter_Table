@@ -1,0 +1,14 @@
+create table testing_table(name varchar(50), contact_name varchar(50), roll_no varchar(10));
+
+#Dropping the column 'name'
+ALTER TABLE testing_table DROP name;
+
+#Renaming contact_name to username
+ALTER TABLE testing_table CHANGE contact_name username VARCHAR(50);
+
+#Adding two new columns
+ALTER TABLE testing_table ADD first_name VARCHAR(50);
+ALTER TABLE testing_table ADD last_name VARCHAR(50);
+
+#Changing the type of roll_no.
+ALTER TABLE testing_table MODIFY roll_no INTEGER(10);

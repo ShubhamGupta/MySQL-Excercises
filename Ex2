@@ -1,0 +1,4 @@
+CREATE DATABASE vtapp;
+#Login as root and create a new User;
+create user 'vtapp_user' IDENTIFIED BY 'myPass';
+GRANT ALL ON vtapp TO vtapp_user;  

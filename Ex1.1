@@ -1,0 +1,23 @@
+Q1:
+SELECT DISTINCT(Location) FROM Sandwiches WHERE Filling IN 
+(SELECT Filling FROM Tastes WHERE Name='Jones'); 
+
+
+Q2:
+SELECT DISTINCT(sand.Location) FROM Sandwiches sand INNER JOIN Tastes taste 
+ON sand.Filling=taste.Filling AND taste.Name='Jones';
+
+/*Q3:
+select sand.Location, count(Distinct(taste.Name)) from Tastes taste inner join Sandwiches sand ON 
+taste.Filling = sand.Filling group by sand.Location;
+*/
+
+
+
+Q3:
+SELECT CONCAT(loc.Lname,', ',loc.Address,', ',loc.Phone) AS "Address", COUNT(DISTINCT(taste.Name)) AS 'No. Of Persons' FROM Sandwiches sand INNER JOIN Locations loc ON
+sand.Location=loc.Lname INNER JOIN Tastes taste 
+ON taste.Filling = sand.Filling GROUP BY sand.Location;
+
+
+

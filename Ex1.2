@@ -1,0 +1,16 @@
+Q1:
+
+SELECT Title FROM Titles WHERE Publisher='Macmillan';
+
+Q2:
+
+Select Distinct(Branch) from Holdings where Title in(Select Title from Titles where Author='Ann Brown'); 
+
+Q3:
+
+Select Distinct(hold.Branch) from Holdings hold inner join Titles title ON 
+hold.Title=title.Title and title.Author='Ann Brown';
+
+Q4:
+Select Branch ,Sum(Copies) As 'No. Of Books' from Holdings group by Branch;
+

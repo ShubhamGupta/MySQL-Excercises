@@ -1,0 +1,17 @@
+Tables:
+users : Id(Primary key), name, type(Admin | Normal);
+categories : Id(Primary Key), Name;
+articles : Id(Primary Key), category(refereneces : categories -> Id), written_by(references : users-> Id), Article_text
+comments : Id(Primary Key), comment_by(references : users -> Id), article_id(references : articles -> Id), comment_text;
+
+Ques: 
+select all articles and comments associated with that articles which is associated with user 3 in one query.
+
+Query: 
+SELECT art.Id,art.article_text, com.comment_text FROM articles art INNER JOIN comments com ON 
+art.Id=com.article_id AND art.written_by IN
+(SELECT Id FROM users WHERE Id="U3");
+
+
+
+
