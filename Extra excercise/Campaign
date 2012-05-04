@@ -1,0 +1,73 @@
+ mysqlimport -uroot -p123 --local --fields-terminated-by="," --lines-terminated-by="\n" campaign 
+ 'Desktop/SQLDump/campaign_data'
+ 
+ 
+1. What all cities did people respond from?
+ANS:
+mysql> select distinct city from campaign_data;
++-----------+
+| city      |
++-----------+
+|  Chennai  |
+|  Delhi    |
+|  Lucknow  |
+|  Mumbai   |
+|  Kolkatta |
++-----------+
+
+-----------------------------------------------
+
+2. How many people responded from each city
+mysql> Select city, count(*) As 'Number Of People' from campaign_data group by city;
++-----------+------------------+
+| city      | Number Of People |
++-----------+------------------+
+|  Chennai  |               42 |
+|  Delhi    |               40 |
+|  Kolkatta |               38 |
+|  Lucknow  |               39 |
+|  Mumbai   |               41 |
++-----------+------------------+
+
+--------------------------------------------------------------
+3. Which city were the maximum respondents from?
+mysql> Select city,count(*)As 'No of People' from campaign_data group by city order by 'No of People' limit 1;
+
++----------+--------------+
+| city     | No of People |
++----------+--------------+
+|  Chennai |           42 |
++----------+--------------+
+
+Another Way : Avoiding limit
+#Select y.city , MAX(y.num) from (Select city,count(*) As num from campaign_data group by city) y;
+------------------------------------------------------------------------
+
+4. What all email domains did people respond from ?
+mysql> select DISTINCT(SUBSTR(email,INSTR(email,'@')+1)) As 'Domain' from campaign_data;
++------------------------------------+
+| Domain                             |
++------------------------------------+
+| me.com                             |
+| yahoo.com                          |
+| gmail.com                          |
+| hotmail.com                        |
++------------------------------------+
+
+------------------------------------------------------------------------
+5. Which is the most popular email domain among the respondents ?
+
+
+ select DISTINCT(SUBSTR(email,INSTR(email,'@')+1)) AS 'Domain',count(SUBSTR(email,INSTR(email,'@')+1)) As "Emails"  
+ from campaign_data group by(SUBSTR(email,INSTR(email,'@')+1)) order by 1 desc LIMIT 1;
+ 
+ 
+ +------------+--------+
+| Domain     | Emails |
++------------+--------+
+| yahoo.com  |     51 |
++------------+--------+
+
+ -----------------------------------------------------------------------------------------------------------
+ 
+

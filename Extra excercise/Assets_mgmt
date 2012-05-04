@@ -1,0 +1,90 @@
+#Find the name of the employee who has been alloted the maximum number of assets till date
+ select first_name  from employees where id=
+ (select allocated_to from allocations group by allocated_to order by count(allocated_to) desc limit 1);
+ +------------+
+| first_name |
++------------+
+| bob        |
++------------+
+
+ ---------------------------------------------------------
+ 
+#Identify the name of the employee who currently has the maximum number of assets as of today
+select first_name from employees where id =
+(select allocated_to from allocations where returned_on is null group by allocated_to order by count(allocated_to)desc limit 1);
+
++------------+
+| first_name |
++------------+
+| bob        |
++------------+
+
+
+---------------------------------------------------------------------------------------
+
+#Find name and period of all the employees who have used a Laptop - let’s say laptop A - since it was bought by the company.
+select emp.first_name , alloc.allocated_on, alloc.returned_on from employees emp inner join allocations alloc 
+ON emp.id=alloc.allocated_to where alloc.asset_id = (select id from assets where name="Laptop A");
++------------+--------------+-------------+
+| first_name | allocated_on | returned_on |
++------------+--------------+-------------+
+| alice      | 2011-01-01   | 2011-12-31  |
+| bob        | 2012-01-01   | NULL        |
++------------+--------------+-------------+
+
+
+-------------------------------------------------------------------------------
+#Find the list of assets that are currently not assigned to anyone .
+
+select name from assets where type<>'Shared' and (id in
+(select id from assets where id not in (select distinct(asset_id) from allocations) OR id in
+(select asset_id from allocations group by asset_id having max(returned_on)> max(allocated_on))));
+
++-----------+
+| name      |
++-----------+
+| Laptop B  |
+| Laptop N1 |
+| Laptop N2 |
++-----------+
+
+
+#An employee say Bob is leaving the company, write a query to get the list of assets he should be returning to the company.
+select name from assets where id in (select asset_id from allocations where allocated_to=
+(select id from employees where first_name="Bob") and returned_on is null);
++----------+
+| name     |
++----------+
+| Laptop A |
+| iPhone B |
++----------+
+
+
+#Write a query to find assets which are out of warranty
+select * from assets where date_add(purchased_on, INTERVAL 1 YEAR) < now();
+#OR>
+select * from assets where date_add(purchased_on, INTERVAL 1 YEAR) < current_date();
++----+----------+-----------+---------+-----------+-------+--------------+----------+------------+
+| id | category | name      | make    | model     | price | purchased_on | type     | located_at |
++----+----------+-----------+---------+-----------+-------+--------------+----------+------------+
+| 1  | Laptop   | Laptop A  | Sony    | Vaio      | 45000 | 2011-01-01   | Personal | NULL       |
+| 2  | Laptop   | Laptop B  | HP      | Pavillion | 50000 | 2011-01-01   | Personal | NULL       |
+| 3  | Laptop   | Laptop N1 | HP      | Pavillion | 50000 | 2011-01-01   | Personal | NULL       |
+| 4  | Laptop   | Laptop N2 | Samsung | Easy      | 20000 | 2011-01-01   | Personal | NULL       |
+| 5  | iPhone   | iPhone A  | Apple   | ios3      | 30000 | 2011-02-01   | Personal | NULL       |
+| 6  | iPhone   | iPhone B  | Apple   | ios3      | 30000 | 2011-01-01   | Personal | NULL       |
++----+----------+-----------+---------+-----------+-------+--------------+----------+------------+
+
+
+#Return a list of Employee Names who do not have any asset assigned to them.
+select first_name from employees where id not in
+(select Distinct(allocated_to) from allocations where returned_on is null);
++------------+
+| first_name |
++------------+
+| Chris      |
+| Duke       |
+| Emily      |
++------------+
+
+----------------------------------------------------------
