@@ -1,6 +1,5 @@
 #Find the name of the employee who has been alloted the maximum number of assets till date
- select first_name  from employees where id=
- (select allocated_to from allocations group by allocated_to order by count(allocated_to) desc limit 1);
+  select first_name from employees where id in(Select max(allocated_to) from allocations);
  +------------+
 | first_name |
 +------------+
