@@ -40,7 +40,7 @@ mysql> Select city,count(*)As 'No of People' from campaign_data group by city or
 +----------+--------------+
 
 Another Way : Avoiding limit
-#Select y.city , MAX(y.num) from (Select city,count(*) As num from campaign_data group by city) y;
+#Select y.city ,y.num from (Select city,count(*) As num from campaign_data group by city) y having y.num=Max(y.num);
 ------------------------------------------------------------------------
 
 4. What all email domains did people respond from ?
