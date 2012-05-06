@@ -18,7 +18,7 @@ mysql> select distinct city from campaign_data;
 -----------------------------------------------
 
 2. How many people responded from each city
-mysql> Select city, count(*) As 'Number Of People' from campaign_data group by city;
+mysql> Select city, count(city) As 'Number Of People' from campaign_data group by city;
 +-----------+------------------+
 | city      | Number Of People |
 +-----------+------------------+
@@ -31,7 +31,7 @@ mysql> Select city, count(*) As 'Number Of People' from campaign_data group by c
 
 --------------------------------------------------------------
 3. Which city were the maximum respondents from?
-mysql> Select city,count(*)As 'No of People' from campaign_data group by city order by 'No of People' limit 1;
+mysql> Select city,count(city)As 'No of People' from campaign_data group by city order by 'No of People' limit 1;
 
 +----------+--------------+
 | city     | No of People |
@@ -40,7 +40,7 @@ mysql> Select city,count(*)As 'No of People' from campaign_data group by city or
 +----------+--------------+
 
 Another Way : Avoiding limit
-#Select y.city ,y.num from (Select city,count(*) As num from campaign_data group by city) y having y.num=Max(y.num);
+#Select y.city ,y.num from (Select city,count(city) As num from campaign_data group by city) y having y.num=Max(y.num);
 ------------------------------------------------------------------------
 
 4. What all email domains did people respond from ?
